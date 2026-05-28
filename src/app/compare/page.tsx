@@ -9,14 +9,21 @@ import { Button } from "@/components/ui/Button";
 import { useCompareStore } from "@/lib/store/useCompareStore";
 import { 
   GitCompare, Trash2, Plus, Star, MapPin, 
-  Check, X, ArrowRight 
+  Check, X, ArrowRight, Bookmark 
 } from "lucide-react";
 import { formatCurrency, formatSalary } from "@/lib/utils";
+import { useAuth } from "@/hooks/useAuth";
+import { supabase } from "@/lib/supabase";
 
 export default function ComparePage() {
   const router = useRouter();
   const { collegeIds, removeCollege, addCollege, clearCompare } = useCompareStore();
   const [dropdownIndex, setDropdownIndex] = React.useState<number | null>(null);
+  
+  const { user } = useAuth();
+  const [isSaving, setIsSaving] = React.useState(false);
+  const [saveSuccess, setSaveSuccess] = React.useState(false);
+  const [saveError, setSaveError] = React.useState<string | null>(null);
 
   // 1. Fetch all colleges so the user can select and add them on the fly
   const { data } = useQuery({
@@ -42,6 +49,44 @@ export default function ComparePage() {
       alert("You can compare up to 3 colleges at a time.");
     }
     setDropdownIndex(null);
+  };
+
+  const handleSaveComparison = async () => {
+    if (!user) {
+      router.push("/auth/signin?redirect=/compare");
+      return;
+    }
+    
+    setIsSaving(true);
+    setSaveError(null);
+    setSaveSuccess(false);
+
+    try {
+      const sessionData = await supabase.auth.getSession();
+      const token = sessionData.data.session?.access_token;
+
+      const headers: Record<string, string> = { "Content-Type": "application/json" };
+      if (token) {
+        headers["Authorization"] = `Bearer ${token}`;
+      }
+
+      const res = await fetch("/api/saved-comparisons", {
+        method: "POST",
+        headers,
+        body: JSON.stringify({ collegeIds }),
+      });
+
+      if (!res.ok) {
+        throw new Error("Failed to save comparison");
+      }
+
+      setSaveSuccess(true);
+      setTimeout(() => setSaveSuccess(false), 3000);
+    } catch (err: any) {
+      setSaveError(err.message || "An error occurred while saving.");
+    } finally {
+      setIsSaving(false);
+    }
   };
 
   const commonFacilities = [
@@ -70,15 +115,45 @@ export default function ComparePage() {
             <p className="text-muted-foreground font-body italic text-sm mt-1">Side-by-side analysis of key metrics: fees, ratings, placements, and facilities.</p>
           </div>
           
-          {collegeIds.length > 0 && (
-            <Button 
-              onClick={clearCompare} 
-              variant="outline" 
-              className="border-destructive/20 text-destructive hover:bg-destructive/10 self-start"
-            >
-              Clear Compare Queue
-            </Button>
-          )}
+          <div className="flex flex-col items-end gap-1.5">
+            <div className="flex flex-wrap items-center gap-2">
+              {collegeIds.length >= 2 && (
+                <Button 
+                  onClick={handleSaveComparison} 
+                  disabled={isSaving}
+                  variant="premium" 
+                  className="rounded font-semibold flex items-center space-x-1.5 shadow-brass"
+                >
+                  {isSaving ? (
+                    <span>Saving...</span>
+                  ) : saveSuccess ? (
+                    <>
+                      <Check className="h-4 w-4" />
+                      <span>Saved!</span>
+                    </>
+                  ) : (
+                    <>
+                      <Bookmark className="h-4 w-4" />
+                      <span>Save Comparison</span>
+                    </>
+                  )}
+                </Button>
+              )}
+
+              {collegeIds.length > 0 && (
+                <Button 
+                  onClick={clearCompare} 
+                  variant="outline" 
+                  className="border-destructive/20 text-destructive hover:bg-destructive/10"
+                >
+                  Clear Queue
+                </Button>
+              )}
+            </div>
+            {saveError && (
+              <span className="text-[10px] text-destructive font-body italic">{saveError}</span>
+            )}
+          </div>
         </div>
 
         {/* 1. EMPTY STATE (Less than 1 college selected) */}
