@@ -1,48 +1,65 @@
 @import "tailwindcss";
 
 :root {
-  --background: 0 0% 100%;
-  --foreground: 240 10% 3.9%;
-  --card: 0 0% 100%;
-  --card-foreground: 240 10% 3.9%;
-  --popover: 0 0% 100%;
-  --popover-foreground: 240 10% 3.9%;
-  --primary: 250 84% 54%; /* Indigo accent for premium brand */
-  --primary-foreground: 210 20% 98%;
-  --secondary: 240 4.8% 95.9%;
-  --secondary-foreground: 240 5.9% 10%;
-  --muted: 240 4.8% 95.9%;
-  --muted-foreground: 240 3.8% 46.1%;
-  --accent: 240 4.8% 95.9%;
-  --accent-foreground: 240 5.9% 10%;
-  --destructive: 0 84.2% 60.2%;
-  --destructive-foreground: 0 0% 98%;
-  --border: 240 5.9% 90%;
-  --input: 240 5.9% 90%;
-  --ring: 250 84% 54%;
-  --radius: 0.75rem;
+  /* Color System - Library at Night (Dignified Academia) */
+  --background: 30 13% 9%; /* Deep Mahogany: #1C1714 */
+  --foreground: 35 24% 87%; /* Antique Parchment: #E8DFD4 */
+  
+  --card: 30 20% 12%; /* Aged Oak: #251E19 */
+  --card-foreground: 35 24% 87%;
+  
+  --popover: 30 20% 12%;
+  --popover-foreground: 35 24% 87%;
+  
+  --primary: 41 53% 58%; /* Polished Brass: #C9A962 */
+  --primary-foreground: 30 13% 9%; /* Dark text on Brass */
+  
+  --secondary: 351 57% 35%; /* Library Crimson: #8B2635 */
+  --secondary-foreground: 35 24% 87%;
+  
+  --muted: 28 17% 20%; /* Worn Leather: #3D332B */
+  --muted-foreground: 30 14% 54%; /* Faded Ink: #9C8B7A */
+  
+  --accent: 41 53% 58%;
+  --accent-foreground: 30 13% 9%;
+  
+  --destructive: 351 57% 35%;
+  --destructive-foreground: 35 24% 87%;
+  
+  --border: 30 16% 25%; /* Wood Grain: #4A3F35 */
+  --input: 30 16% 25%;
+  --ring: 41 53% 58%;
+  --radius: 4px; /* Subtle traditional corners */
 }
 
 .dark {
-  --background: 240 10% 3.9%;
-  --foreground: 0 0% 98%;
-  --card: 240 10% 4.8%;
-  --card-foreground: 0 0% 98%;
-  --popover: 240 10% 3.9%;
-  --popover-foreground: 0 0% 98%;
-  --primary: 250 84% 63%; /* Slightly brighter Indigo in dark mode */
-  --primary-foreground: 210 20% 98%;
-  --secondary: 240 3.7% 15.9%;
-  --secondary-foreground: 0 0% 98%;
-  --muted: 240 3.7% 15.9%;
-  --muted-foreground: 240 5% 64.9%;
-  --accent: 240 3.7% 15.9%;
-  --accent-foreground: 0 0% 98%;
-  --destructive: 0 62.8% 30.6%;
-  --destructive-foreground: 0 0% 98%;
-  --border: 240 3.7% 15.9%;
-  --input: 240 3.7% 15.9%;
-  --ring: 250 84% 63%;
+  --background: 30 13% 9%;
+  --foreground: 35 24% 87%;
+  
+  --card: 30 20% 12%;
+  --card-foreground: 35 24% 87%;
+  
+  --popover: 30 20% 12%;
+  --popover-foreground: 35 24% 87%;
+  
+  --primary: 41 53% 58%;
+  --primary-foreground: 30 13% 9%;
+  
+  --secondary: 351 57% 35%;
+  --secondary-foreground: 35 24% 87%;
+  
+  --muted: 28 17% 20%;
+  --muted-foreground: 30 14% 54%;
+  
+  --accent: 41 53% 58%;
+  --accent-foreground: 30 13% 9%;
+  
+  --destructive: 351 57% 35%;
+  --destructive-foreground: 35 24% 87%;
+  
+  --border: 30 16% 25%;
+  --input: 30 16% 25%;
+  --ring: 41 53% 58%;
 }
 
 @theme {
@@ -68,7 +85,12 @@
   
   --radius-lg: var(--radius);
   --radius-md: calc(var(--radius) - 2px);
-  --radius-sm: calc(var(--radius) - 4px);
+  --radius-sm: calc(var(--radius) - 3px);
+
+  /* Set up typography family names */
+  --font-heading: var(--font-cormorant), serif;
+  --font-body: var(--font-crimson), serif;
+  --font-display: var(--font-cinzel), serif;
 }
 
 * {
@@ -78,5 +100,173 @@
 body {
   background-color: var(--color-background);
   color: var(--color-foreground);
-  font-feature-settings: "cv02", "cv03", "cv04", "cv11";
+  font-family: var(--font-body);
+  -webkit-font-smoothing: antialiased;
+  position: relative;
+}
+
+/* Aged Paper noise overlay */
+.paper-texture {
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0.025;
+  pointer-events: none;
+  z-index: 9999;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+}
+
+/* Vignette illumination filter */
+.vignette-overlay {
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 9998;
+  background: radial-gradient(ellipse at center, transparent 0%, transparent 60%, rgba(28,23,20,0.45) 100%);
+}
+
+/* Cathedral arch signature tops for images */
+.arch-top {
+  border-radius: 40% 40% 0 0 / 20% 20% 0 0;
+}
+
+/* Sepia image treatments */
+.sepia-effect {
+  filter: sepia(0.6) contrast(0.95) brightness(0.85);
+  transition: filter 0.7s ease-out, transform 0.7s ease-out;
+}
+
+.sepia-effect:hover {
+  filter: sepia(0) contrast(1) brightness(1);
+}
+
+/* Ornate Frame Corner Flourish (Large) */
+.ornate-frame {
+  position: relative;
+}
+
+.ornate-frame::before,
+.ornate-frame::after {
+  content: "";
+  position: absolute;
+  width: 32px;
+  height: 32px;
+  border: 2px solid #C9A962;
+  pointer-events: none;
+}
+
+.ornate-frame::before {
+  top: -1px;
+  left: -1px;
+  border-right: none;
+  border-bottom: none;
+}
+
+.ornate-frame::after {
+  bottom: -1px;
+  right: -1px;
+  border-left: none;
+  border-top: none;
+}
+
+/* Ornate Corner Flourish (Cards) */
+.corner-flourish {
+  position: relative;
+}
+
+.corner-flourish::before,
+.corner-flourish::after {
+  content: "";
+  position: absolute;
+  width: 16px;
+  height: 16px;
+  border: 1px solid rgba(201, 169, 98, 0.4);
+  pointer-events: none;
+  transition: border-color 0.3s ease;
+}
+
+.corner-flourish::before {
+  top: -1px;
+  left: -1px;
+  border-right: none;
+  border-bottom: none;
+}
+
+.corner-flourish::after {
+  bottom: -1px;
+  right: -1px;
+  border-left: none;
+  border-top: none;
+}
+
+.corner-flourish:hover::before,
+.corner-flourish:hover::after {
+  border-color: rgba(201, 169, 98, 1);
+}
+
+/* Ornate Divider with decorative Glyph */
+.ornate-divider {
+  position: relative;
+  height: 1px;
+  background: linear-gradient(90deg, transparent 0%, #4A3F35 25%, #C9A962 50%, #4A3F35 75%, transparent 100%);
+  margin: 3rem 0;
+}
+
+.ornate-divider::before {
+  content: "❧";
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  color: #C9A962;
+  font-size: 16px;
+  background: #1C1714;
+  padding: 0 12px;
+}
+
+/* Illuminated Manuscript drop cap */
+.drop-cap::first-letter {
+  font-family: var(--font-cinzel), serif;
+  font-size: 4.25rem;
+  float: left;
+  margin-right: 0.5rem;
+  line-height: 0.85;
+  color: #C9A962;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+}
+
+/* Polished metallic brass button */
+.bg-brass {
+  background: linear-gradient(180deg, #D4B872 0%, #C9A962 50%, #B8953F 100%);
+}
+
+.shadow-brass {
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.25), inset 0 -1px 0 rgba(0, 0, 0, 0.2), 0 2px 8px rgba(0, 0, 0, 0.35);
+}
+
+.shadow-brass:hover {
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.25), inset 0 -1px 0 rgba(0, 0, 0, 0.2), 0 4px 12px rgba(201, 169, 98, 0.35);
+}
+
+/* Pressed metal engraving */
+.text-engraved {
+  text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.4), -1px -1px 1px rgba(255, 255, 255, 0.05);
+}
+
+/* Premium Card Shadows */
+.shadow-premium {
+  box-shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.25);
+}
+
+.shadow-premium-hover:hover {
+  box-shadow: 0 12px 30px -4px rgba(0, 0, 0, 0.4);
+}
+
+/* Wax Seal styling */
+.wax-seal {
+  background: radial-gradient(circle at 35% 35%, #b23b4b, #8b2635, #5f1520);
+  box-shadow: inset 0 2px 4px rgba(255, 255, 255, 0.2), inset 0 -2px 4px rgba(0, 0, 0, 0.3), 0 4px 8px rgba(0, 0, 0, 0.4);
 }
