@@ -2,16 +2,17 @@
 
 import * as React from "react";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
-import { useSession, signOut } from "next-auth/react";
+import { usePathname, useRouter } from "next/navigation";
+import { useAuth } from "@/hooks/useAuth";
 import { useCompareStore } from "@/lib/store/useCompareStore";
 import { Button } from "@/components/ui/Button";
-import { Compass, GitCompare, Bookmark, LogOut, Menu, X, ShieldAlert } from "lucide-react";
+import { Compass, GitCompare, Bookmark, LogOut, Menu, X } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 
 export function Navbar() {
   const pathname = usePathname();
-  const { data: session, status } = useSession();
+  const router = useRouter();
+  const { user, loading, signOut } = useAuth();
   const compareIds = useCompareStore((state) => state.collegeIds);
   const [isOpen, setIsOpen] = React.useState(false);
   const [dropdownOpen, setDropdownOpen] = React.useState(false);
@@ -22,16 +23,16 @@ export function Navbar() {
   ];
 
   return (
-    <header className="sticky top-0 z-50 w-full border-b border-border/40 bg-background/80 backdrop-blur-md">
+    <header className="sticky top-0 z-50 w-full border-b border-border bg-background/85 backdrop-blur-md">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="flex h-16 items-center justify-between">
           {/* Logo */}
-          <Link href="/" className="flex items-center space-x-2 group">
-            <div className="relative flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-tr from-indigo-500 via-purple-500 to-pink-500 shadow-md shadow-indigo-500/10 group-hover:scale-105 transition-transform duration-200">
-              <Compass className="h-5 w-5 text-white" />
-              <div className="absolute inset-0 rounded-xl bg-white/20 opacity-0 group-hover:opacity-100 transition-opacity duration-200" />
+          <Link href="/" className="flex items-center space-x-2.5 group">
+            <div className="relative flex h-10 w-10 items-center justify-center rounded border border-[#C9A962]/40 bg-[#251E19] text-primary shadow-brass group-hover:scale-105 transition-transform duration-200">
+              <Compass className="h-5 w-5 text-primary" />
+              <div className="absolute inset-0 rounded bg-primary/10 opacity-0 group-hover:opacity-100 transition-opacity duration-200" />
             </div>
-            <span className="bg-gradient-to-r from-white via-slate-200 to-slate-400 bg-clip-text text-xl font-bold tracking-tight text-transparent">
+            <span className="font-display uppercase tracking-widest text-primary text-base font-bold group-hover:text-[#D4B872] transition-colors">
               CampusCompass
             </span>
           </Link>
@@ -45,14 +46,14 @@ export function Navbar() {
                 <Link
                   key={link.href}
                   href={link.href}
-                  className={`relative flex items-center space-x-1.5 text-sm font-medium transition-colors ${
+                  className={`relative flex items-center space-x-1.5 font-display text-xs uppercase tracking-wider font-semibold transition-colors ${
                     isActive ? "text-primary" : "text-muted-foreground hover:text-foreground"
                   }`}
                 >
                   <Icon className="h-4 w-4" />
                   <span>{link.label}</span>
                   {link.badge !== undefined && link.badge > 0 && (
-                    <span className="flex h-5 min-w-5 items-center justify-center rounded-full bg-primary px-1.5 text-[10px] font-bold text-white">
+                    <span className="flex h-5 min-w-5 items-center justify-center rounded-full bg-primary px-1.5 text-[9px] font-bold text-[#1C1714]">
                       {link.badge}
                     </span>
                   )}
@@ -70,28 +71,28 @@ export function Navbar() {
 
           {/* User Auth Buttons */}
           <div className="hidden md:flex items-center space-x-4">
-            {status === "loading" ? (
-              <div className="h-8 w-8 animate-pulse rounded-full bg-muted" />
-            ) : session ? (
+            {loading ? (
+              <div className="h-8 w-8 animate-pulse rounded bg-muted" />
+            ) : user ? (
               /* Profile Dropdown Container */
               <div className="relative">
                 <button
                   onClick={() => setDropdownOpen(!dropdownOpen)}
-                  className="flex items-center space-x-2 rounded-full border border-border bg-card p-1 pr-3 hover:bg-accent/40 transition-colors focus:outline-none"
+                  className="flex items-center space-x-2 rounded border border-border bg-card p-1 pr-3 hover:bg-muted/40 transition-colors focus:outline-none cursor-pointer"
                 >
-                  {session.user?.image ? (
+                  {user.user_metadata?.avatar_url || user.user_metadata?.image ? (
                     <img
-                      src={session.user.image}
-                      alt={session.user.name || "User"}
-                      className="h-7 w-7 rounded-full object-cover"
+                      src={user.user_metadata.avatar_url || user.user_metadata.image}
+                      alt={user.user_metadata?.full_name || user.user_metadata?.name || "User"}
+                      className="h-7 w-7 rounded-sm object-cover"
                     />
                   ) : (
-                    <div className="flex h-7 w-7 items-center justify-center rounded-full bg-indigo-500 text-xs font-bold text-white">
-                      {session.user?.name?.[0] || "U"}
+                    <div className="flex h-7 w-7 items-center justify-center rounded bg-primary text-xs font-bold text-[#1C1714]">
+                      {(user.user_metadata?.full_name || user.user_metadata?.name || user.email)?.[0]?.toUpperCase() || "U"}
                     </div>
                   )}
                   <span className="text-xs font-medium max-w-[100px] truncate">
-                    {session.user?.name || "Dashboard"}
+                    {user.user_metadata?.full_name || user.user_metadata?.name || user.email?.split("@")[0] || "Dashboard"}
                   </span>
                 </button>
 
@@ -107,26 +108,27 @@ export function Navbar() {
                         animate={{ opacity: 1, y: 0, scale: 1 }}
                         exit={{ opacity: 0, y: 10, scale: 0.95 }}
                         transition={{ duration: 0.15 }}
-                        className="absolute right-0 mt-2 w-48 rounded-xl border border-border bg-slate-950/95 p-1 shadow-xl backdrop-blur-md z-20"
+                        className="absolute right-0 mt-2 w-48 rounded border border-border bg-card p-1 shadow-premium backdrop-blur-md z-20"
                       >
                         <div className="px-3 py-2 border-b border-border/40">
-                          <p className="text-[10px] text-muted-foreground truncate">Signed in as</p>
-                          <p className="text-xs font-semibold truncate">{session.user?.email}</p>
+                          <p className="text-[10px] text-muted-foreground uppercase tracking-wider font-display">Signed in as</p>
+                          <p className="text-xs font-semibold truncate text-foreground">{user?.email}</p>
                         </div>
                         <Link
                           href="/dashboard"
                           onClick={() => setDropdownOpen(false)}
-                          className="flex items-center space-x-2 px-3 py-2 text-sm text-muted-foreground hover:text-foreground rounded-lg hover:bg-accent/50 transition-colors"
+                          className="flex items-center space-x-2 px-3 py-2 text-sm text-muted-foreground hover:text-foreground rounded hover:bg-muted/50 transition-colors"
                         >
                           <Bookmark className="h-4 w-4" />
                           <span>Saved Colleges</span>
                         </Link>
                         <button
-                          onClick={() => {
+                          onClick={async () => {
                             setDropdownOpen(false);
-                            signOut({ callbackUrl: "/" });
+                            await signOut();
+                            router.push("/");
                           }}
-                          className="flex w-full items-center space-x-2 px-3 py-2 text-sm text-rose-400 hover:text-rose-300 rounded-lg hover:bg-rose-500/10 transition-colors cursor-pointer text-left"
+                          className="flex w-full items-center space-x-2 px-3 py-2 text-sm text-rose-400 hover:text-rose-300 rounded hover:bg-rose-500/10 transition-colors cursor-pointer text-left"
                         >
                           <LogOut className="h-4 w-4" />
                           <span>Sign Out</span>
@@ -167,7 +169,7 @@ export function Navbar() {
             initial={{ opacity: 0, height: 0 }}
             animate={{ opacity: 1, height: "auto" }}
             exit={{ opacity: 0, height: 0 }}
-            className="md:hidden border-t border-border/40 bg-background/95 backdrop-blur-md"
+            className="md:hidden border-t border-border bg-card/95 backdrop-blur-md"
           >
             <div className="space-y-1 px-4 py-4">
               {navLinks.map((link) => {
@@ -178,14 +180,16 @@ export function Navbar() {
                     key={link.href}
                     href={link.href}
                     onClick={() => setIsOpen(false)}
-                    className={`flex items-center space-x-3 rounded-lg px-3 py-2.5 text-base font-medium transition-colors ${
-                      isActive ? "bg-accent text-primary" : "text-muted-foreground hover:bg-accent/40 hover:text-foreground"
+                    className={`flex items-center space-x-3 rounded px-3 py-2.5 font-display text-xs uppercase tracking-wider transition-colors ${
+                      isActive 
+                        ? "bg-[#1C1714] border border-[#C9A962]/30 text-primary" 
+                        : "text-muted-foreground hover:bg-muted/30 hover:text-foreground"
                     }`}
                   >
-                    <Icon className="h-5 w-5" />
+                    <Icon className="h-4 w-4" />
                     <span>{link.label}</span>
                     {link.badge !== undefined && link.badge > 0 && (
-                      <span className="ml-auto flex h-5 min-w-5 items-center justify-center rounded-full bg-primary px-1.5 text-xs font-bold text-white">
+                      <span className="ml-auto flex h-5 min-w-5 items-center justify-center rounded-full bg-primary px-1.5 text-[9px] font-bold text-[#1C1714]">
                         {link.badge}
                       </span>
                     )}
@@ -194,41 +198,44 @@ export function Navbar() {
               })}
 
               <div className="border-t border-border/40 my-3 pt-3">
-                {session ? (
+                {user ? (
                   <div className="space-y-1">
                     <div className="px-3 py-2 flex items-center space-x-3">
-                      {session.user?.image ? (
+                      {user.user_metadata?.avatar_url || user.user_metadata?.image ? (
                         <img
-                          src={session.user.image}
-                          alt={session.user.name || "User"}
-                          className="h-9 w-9 rounded-full object-cover"
+                          src={user.user_metadata.avatar_url || user.user_metadata.image}
+                          alt={user.user_metadata?.full_name || user.user_metadata?.name || "User"}
+                          className="h-9 w-9 rounded-sm object-cover"
                         />
                       ) : (
-                        <div className="flex h-9 w-9 items-center justify-center rounded-full bg-indigo-500 text-sm font-bold text-white">
-                          {session.user?.name?.[0] || "U"}
+                        <div className="flex h-9 w-9 items-center justify-center rounded bg-primary text-sm font-bold text-[#1C1714]">
+                          {(user.user_metadata?.full_name || user.user_metadata?.name || user.email)?.[0]?.toUpperCase() || "U"}
                         </div>
                       )}
                       <div>
-                        <p className="text-sm font-semibold">{session.user?.name}</p>
-                        <p className="text-xs text-muted-foreground">{session.user?.email}</p>
+                        <p className="text-sm font-semibold truncate max-w-[150px] text-foreground">
+                          {user.user_metadata?.full_name || user.user_metadata?.name || user.email?.split("@")[0]}
+                        </p>
+                        <p className="text-xs text-muted-foreground truncate max-w-[150px]">{user.email}</p>
                       </div>
                     </div>
                     <Link
                       href="/dashboard"
                       onClick={() => setIsOpen(false)}
-                      className="flex items-center space-x-3 rounded-lg px-3 py-2.5 text-base text-muted-foreground hover:bg-accent/40 hover:text-foreground"
+                      className="flex items-center space-x-3 rounded px-3 py-2.5 font-display text-xs uppercase tracking-wider text-muted-foreground hover:bg-muted/30 hover:text-foreground"
                     >
-                      <Bookmark className="h-5 w-5" />
+                      <Bookmark className="h-4 w-4" />
                       <span>Saved Colleges</span>
                     </Link>
                     <button
-                      onClick={() => {
+                      onClick={async () => {
                         setIsOpen(false);
-                        signOut({ callbackUrl: "/" });
+                        await signOut();
+                        router.push("/");
                       }}
-                      className="flex w-full items-center space-x-3 rounded-lg px-3 py-2.5 text-base text-rose-400 hover:bg-rose-500/10"
+                      className="flex w-full items-center space-x-3 rounded px-3 py-2.5 font-display text-xs uppercase tracking-wider text-rose-400 hover:bg-rose-500/10 cursor-pointer text-left"
                     >
-                      <LogOut className="h-5 w-5" />
+                      <LogOut className="h-4 w-4" />
                       <span>Sign Out</span>
                     </button>
                   </div>
