@@ -63,6 +63,9 @@ export async function GET(request: NextRequest) {
           orderBy: { year: "desc" }
         },
         reviews: {
+          include: {
+            user: true
+          },
           orderBy: { createdAt: "desc" }
         }
       }
@@ -71,14 +74,17 @@ export async function GET(request: NextRequest) {
     // Map DB objects to match front-end format
     colleges = dbColleges.map((c) => ({
       ...c,
-      reviews: c.reviews.map((r) => ({
-        ...r,
-        // Since we don't have mock user joints hydrated in detail, we mock user details
-        userName: r.userId === "alex-id" ? "Alex Johnson" : "Priya Sharma",
-        userImage: r.userId === "alex-id" 
+      reviews: c.reviews.map((r: any) => {
+        const name = r.user?.name || (r.userId === "alex-id" ? "Alex Johnson" : "Anonymous Scholar");
+        const image = r.user?.image || (r.userId === "alex-id" 
           ? "https://images.unsplash.com/photo-1534528741775-53994a69daeb?q=80&w=200&fit=crop" 
-          : "https://images.unsplash.com/photo-1494790108377-be9c29b29330?q=80&w=200&fit=crop"
-      }))
+          : null);
+        return {
+          ...r,
+          userName: name,
+          userImage: image
+        };
+      })
     }));
   } catch (error) {
     console.warn("Prisma query failed. Using in-memory fallback:", error instanceof Error ? error.message : error);

@@ -22,20 +22,27 @@ export async function GET(
           orderBy: { year: "desc" }
         },
         reviews: {
+          include: {
+            user: true
+          },
           orderBy: { createdAt: "desc" }
         }
       }
     });
 
     if (college) {
-      // Map reviews user names
-      const mappedReviews = college.reviews.map((r) => ({
-        ...r,
-        userName: r.userId === "alex-id" ? "Alex Johnson" : "Priya Sharma",
-        userImage: r.userId === "alex-id" 
+      // Map reviews user names dynamically from user table
+      const mappedReviews = college.reviews.map((r: any) => {
+        const name = r.user?.name || (r.userId === "alex-id" ? "Alex Johnson" : "Anonymous Scholar");
+        const image = r.user?.image || (r.userId === "alex-id" 
           ? "https://images.unsplash.com/photo-1534528741775-53994a69daeb?q=80&w=200&h=200&fit=crop" 
-          : "https://images.unsplash.com/photo-1494790108377-be9c29b29330?q=80&w=200&h=200&fit=crop"
-      }));
+          : null);
+        return {
+          ...r,
+          userName: name,
+          userImage: image
+        };
+      });
 
       return NextResponse.json({ college: { ...college, reviews: mappedReviews } });
     }
