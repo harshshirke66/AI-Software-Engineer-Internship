@@ -29,9 +29,9 @@ export function Footer() {
             <h4 className="text-xs font-semibold text-primary tracking-widest uppercase mb-4 font-display">Discover</h4>
             <ul className="space-y-2.5 text-sm">
               <li><Link href="/colleges" className="hover:text-primary transition-colors">Find Colleges</Link></li>
+              <li><Link href="/predictor" className="hover:text-primary transition-colors">Oraculum Predictor</Link></li>
               <li><Link href="/compare" className="hover:text-primary transition-colors">Compare Tool</Link></li>
-              <li><a href="#" className="hover:text-primary transition-colors">Top Engineering Streams</a></li>
-              <li><a href="#" className="hover:text-primary transition-colors">Top Management Streams</a></li>
+              <li><Link href="/discussions" className="hover:text-primary transition-colors">Discussion Board</Link></li>
             </ul>
           </div>
 

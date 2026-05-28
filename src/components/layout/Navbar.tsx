@@ -6,7 +6,7 @@ import { usePathname, useRouter } from "next/navigation";
 import { useAuth } from "@/hooks/useAuth";
 import { useCompareStore } from "@/lib/store/useCompareStore";
 import { Button } from "@/components/ui/Button";
-import { Compass, GitCompare, Bookmark, LogOut, Menu, X } from "lucide-react";
+import { Compass, GitCompare, Bookmark, LogOut, Menu, X, Sparkles, MessageSquare } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 
 export function Navbar() {
@@ -19,6 +19,8 @@ export function Navbar() {
 
   const navLinks = [
     { href: "/colleges", label: "Colleges", icon: Compass },
+    { href: "/predictor", label: "Predictor", icon: Sparkles },
+    { href: "/discussions", label: "Discussions", icon: MessageSquare },
     { href: "/compare", label: "Compare", icon: GitCompare, badge: compareIds.length },
   ];
 
