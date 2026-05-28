@@ -1,0 +1,111 @@
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model User {
+  id            String         @id @default(uuid())
+  name          String?
+  email         String         @unique
+  password      String // hashed password
+  image         String?
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @updatedAt
+  savedColleges SavedCollege[]
+  comparisons   Comparison[]
+  reviews       Review[]
+
+  @@map("users")
+}
+
+model College {
+  id           String         @id @default(uuid())
+  name         String
+  description  String
+  location     String // City
+  state        String // State
+  rating       Float          @default(0.0)
+  averageFees  Float // annual average fees in INR or USD (we'll treat it as generic currency, e.g. in Lakhs per year or absolute INR)
+  logoUrl      String?
+  imageUrl     String?
+  type         String // e.g. "Public", "Private"
+  established  Int?
+  facilities   String[] // Array of facilities like Wifi, Library, Hostel, Sports, Gym, Labs
+  createdAt    DateTime       @default(now())
+  updatedAt    DateTime       @updatedAt
+  courses      Course[]
+  placements   Placement[]
+  reviews      Review[]
+  savedBy      SavedCollege[]
+
+  @@map("colleges")
+}
+
+model Course {
+  id          String   @id @default(uuid())
+  collegeId   String
+  name        String // Course Name: e.g. "B.Tech Computer Science", "MBA Finance"
+  duration    Int // duration in years
+  fees        Float // annual fees
+  description String?
+  stream      String // e.g. "Engineering", "Management", "Medical", "Arts"
+  college     College  @relation(fields: [collegeId], references: [id], onDelete: Cascade)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@map("courses")
+}
+
+model Placement {
+  id             String   @id @default(uuid())
+  collegeId      String
+  year           Int
+  highestPackage Float // In LPA (Lakhs Per Annum)
+  averagePackage Float // In LPA
+  placementRate  Float // Percentage (e.g. 92.5)
+  topRecruiters  String[] // Array of company names
+  college        College  @relation(fields: [collegeId], references: [id], onDelete: Cascade)
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  @@map("placements")
+}
+
+model Review {
+  id        String   @id @default(uuid())
+  collegeId String
+  userId    String
+  rating    Float
+  comment   String
+  createdAt DateTime @default(now())
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  college   College  @relation(fields: [collegeId], references: [id], onDelete: Cascade)
+
+  @@map("reviews")
+}
+
+model SavedCollege {
+  id        String   @id @default(uuid())
+  userId    String
+  collegeId String
+  createdAt DateTime @default(now())
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  college   College  @relation(fields: [collegeId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, collegeId])
+  @@map("saved_colleges")
+}
+
+model Comparison {
+  id         String   @id @default(uuid())
+  userId     String
+  collegeIds String[] // Array of college IDs to compare
+  createdAt  DateTime @default(now())
+  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("comparisons")
+}
