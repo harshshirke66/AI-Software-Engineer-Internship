@@ -7,7 +7,7 @@ import Link from "next/link";
 import { Button } from "@/components/ui/Button";
 import { Input } from "@/components/ui/Input";
 import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from "@/components/ui/Card";
-import { Compass, Mail, Lock, ShieldAlert, Sparkles } from "lucide-react";
+import { Compass, Mail, Lock, ShieldAlert } from "lucide-react";
 import { motion } from "framer-motion";
 
 function SignInContent() {
@@ -63,10 +63,6 @@ function SignInContent() {
     }
   };
 
-  const fillQuickCredentials = (userEmail: string, pass: string) => {
-    setEmail(userEmail);
-    setPassword(pass);
-  };
 
   return (
     <div className="relative min-h-screen bg-background flex items-center justify-center p-4 overflow-hidden">
@@ -143,31 +139,6 @@ function SignInContent() {
               </Button>
             </form>
 
-            {/* Quick Login Helper Panel */}
-            <div className="border-t border-border pt-4 mt-2">
-              <div className="flex items-center space-x-1.5 mb-2.5 text-[9px] font-display text-primary font-semibold uppercase tracking-widest">
-                <Sparkles className="h-3.5 w-3.5" />
-                <span>Demo Sandbox Logins</span>
-              </div>
-              <div className="grid grid-cols-2 gap-2 text-xs">
-                <button
-                  type="button"
-                  onClick={() => fillQuickCredentials("alex@example.com", "password123")}
-                  className="p-2 rounded border border-border bg-[#1C1714] text-left hover:bg-primary/5 transition-colors cursor-pointer"
-                >
-                  <div className="font-heading font-medium text-foreground text-sm">Alex Johnson</div>
-                  <div className="text-[10px] text-muted-foreground font-body italic">alex@example.com</div>
-                </button>
-                <button
-                  type="button"
-                  onClick={() => fillQuickCredentials("priya@example.com", "student2026")}
-                  className="p-2 rounded border border-border bg-[#1C1714] text-left hover:bg-primary/5 transition-colors cursor-pointer"
-                >
-                  <div className="font-heading font-medium text-foreground text-sm">Priya Sharma</div>
-                  <div className="text-[10px] text-muted-foreground font-body italic">priya@example.com</div>
-                </button>
-              </div>
-            </div>
 
           </CardContent>
           <CardFooter className="pt-2 border-t border-border justify-center font-display text-xs uppercase tracking-wider">

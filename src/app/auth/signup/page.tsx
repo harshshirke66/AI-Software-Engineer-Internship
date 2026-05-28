@@ -57,17 +57,32 @@ export default function SignUpPage() {
       if (signUpError) {
         setError(signUpError.message || "Something went wrong. Please try again.");
       } else {
-        setSuccess(true);
-        // Clear fields
-        setName("");
-        setEmail("");
-        setPassword("");
-        setConfirmPassword("");
-        
-        // Wait a second and redirect to sign in page
-        setTimeout(() => {
-          router.push("/auth/signin");
-        }, 1500);
+        // Automatically sign in the user using the credentials they just created
+        const { error: signInError } = await supabase.auth.signInWithPassword({
+          email,
+          password,
+        });
+
+        if (signInError) {
+          // If auto sign-in fails (e.g. email confirmation required, though typically disabled),
+          // fallback to telling the user to check their email/sign in manually.
+          setError("Account created, but auto-login failed: " + signInError.message);
+          setTimeout(() => {
+            router.push("/auth/signin");
+          }, 3000);
+        } else {
+          setSuccess(true);
+          // Clear fields
+          setName("");
+          setEmail("");
+          setPassword("");
+          setConfirmPassword("");
+          
+          // Wait a second and redirect to dashboard page
+          setTimeout(() => {
+            router.push("/dashboard");
+          }, 1500);
+        }
       }
     } catch {
       setError("Failed to register. Please check your internet connection.");
@@ -111,7 +126,7 @@ export default function SignUpPage() {
                 <CheckCircle2 className="h-5 w-5 shrink-0 mt-0.5" />
                 <div>
                   <h4 className="font-bold text-foreground not-italic">Registration Successful!</h4>
-                  <p className="text-xs text-muted-foreground mt-1">Redirecting you to the sign-in portal...</p>
+                  <p className="text-xs text-muted-foreground mt-1">Logging you in and redirecting to dashboard...</p>
                 </div>
               </div>
             ) : null}
