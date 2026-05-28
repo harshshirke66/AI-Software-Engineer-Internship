@@ -108,64 +108,110 @@ export default function Home() {
       <main className="flex-grow z-10">
         
         {/* 1. Hero Section */}
-        <section className="relative py-24 md:py-32">
-          <div className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8 text-center">
-            
-            {/* Tagline Roman Number Label */}
-            <motion.div 
-              initial={{ opacity: 0, scale: 0.95 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ duration: 0.5 }}
-              className="mb-4"
-            >
-              <span className="font-display text-[11px] tracking-[0.25em] text-primary uppercase">
-                Volume I • The Scholarly Declaration
-              </span>
-            </motion.div>
+        <section className="relative py-20 md:py-28 overflow-hidden">
+          <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+              
+              {/* Left Column: Proclamation and Input */}
+              <div className="lg:col-span-7 space-y-6 text-left">
+                {/* Tagline Roman Number Label */}
+                <motion.div 
+                  initial={{ opacity: 0, scale: 0.95 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  transition={{ duration: 0.5 }}
+                  className="flex items-center space-x-3"
+                >
+                  <span className="h-[1px] w-8 bg-primary/45" />
+                  <span className="font-display text-[10px] tracking-[0.25em] text-primary uppercase">
+                    Volume I • The Scholarly Declaration
+                  </span>
+                  <span className="h-[1px] w-8 bg-primary/45" />
+                </motion.div>
 
-            {/* Cormorant Garamond Heading */}
-            <motion.h1 
-              variants={containerVariants}
-              initial="hidden"
-              animate="visible"
-              className="font-heading font-medium text-4xl sm:text-6xl tracking-tight text-foreground max-w-3xl mx-auto leading-[1.15]"
-            >
-              <motion.span variants={itemVariants}>Navigate Your Academic</motion.span> <br />
-              <motion.span variants={itemVariants} className="italic text-primary font-normal">Future with Dignity & Confidence</motion.span>
-            </motion.h1>
+                {/* Cormorant Garamond Heading */}
+                <motion.h1 
+                  variants={containerVariants}
+                  initial="hidden"
+                  animate="visible"
+                  className="font-heading font-medium text-4xl sm:text-6xl tracking-tight text-foreground leading-[1.15]"
+                >
+                  <motion.span variants={itemVariants}>Navigate Your Academic</motion.span> <br />
+                  <motion.span variants={itemVariants} className="italic text-primary font-normal">Future with Dignity & Confidence</motion.span>
+                </motion.h1>
 
-            {/* Drop Cap Introductory Paragraph */}
-            <motion.p 
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ delay: 0.6, duration: 0.6 }}
-              className="mt-8 text-base sm:text-lg text-muted-foreground max-w-2xl mx-auto leading-relaxed drop-cap text-left sm:text-justify"
-            >
-              Discover elite global institutions, analyze placement reports, check fee catalogs, and execute direct side-by-side comparative analysis. Every scholar deserves a pathway forged in truth, clarity, and distinguished academic heritage.
-            </motion.p>
+                {/* Drop Cap Introductory Paragraph */}
+                <motion.p 
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  transition={{ delay: 0.4, duration: 0.5 }}
+                  className="text-base sm:text-lg text-muted-foreground leading-relaxed drop-cap text-justify max-w-2xl"
+                >
+                  Discover elite global institutions, analyze placement reports, check fee catalogs, and execute direct side-by-side comparative analysis. Every scholar deserves a pathway forged in truth, clarity, and distinguished academic heritage.
+                </motion.p>
 
-            {/* Interactive Search Bar */}
-            <motion.div 
-              initial={{ opacity: 0, y: 15 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.7, duration: 0.5 }}
-              className="mt-10 max-w-xl mx-auto"
-            >
-              <form onSubmit={handleSearchSubmit} className="relative flex items-center p-1.5 rounded border border-border bg-[#251E19] shadow-premium focus-within:ring-2 focus-within:ring-primary focus-within:border-transparent transition-all">
-                <Search className="h-5 w-5 text-primary ml-3.5 flex-shrink-0" />
-                <Input 
-                  type="text"
-                  placeholder="Search by college name, course, state..."
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                  className="bg-transparent border-0 focus-visible:ring-0 focus-visible:ring-offset-0 placeholder:italic placeholder:text-muted-foreground/50 text-foreground py-6 text-sm pr-4 font-body"
-                />
-                <Button type="submit" variant="premium" className="rounded px-5 sm:px-6 py-5 shrink-0">
-                  Search
-                </Button>
-              </form>
-            </motion.div>
-            
+                {/* Interactive Search Bar */}
+                <motion.div 
+                  initial={{ opacity: 0, y: 15 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.5, duration: 0.5 }}
+                  className="pt-2 max-w-xl"
+                >
+                  <form onSubmit={handleSearchSubmit} className="relative flex items-center p-1.5 rounded border border-border bg-[#251E19] shadow-premium focus-within:ring-2 focus-within:ring-primary focus-within:border-transparent transition-all">
+                    <Search className="h-5 w-5 text-primary ml-3.5 flex-shrink-0" />
+                    <Input 
+                      type="text"
+                      placeholder="Search by college name, course, state..."
+                      value={searchQuery}
+                      onChange={(e) => setSearchQuery(e.target.value)}
+                      className="bg-transparent border-0 focus-visible:ring-0 focus-visible:ring-offset-0 placeholder:italic placeholder:text-muted-foreground/50 text-foreground py-6 text-sm pr-4 font-body"
+                    />
+                    <Button type="submit" variant="premium" className="rounded px-5 sm:px-6 py-5 shrink-0">
+                      Search
+                    </Button>
+                  </form>
+                </motion.div>
+
+                {/* Subtext info indicators in Cinzel */}
+                <motion.div
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  transition={{ delay: 0.6 }}
+                  className="flex items-center space-x-6 text-[9px] font-display uppercase tracking-widest text-muted-foreground pt-4 border-t border-border/20 max-w-xl"
+                >
+                  <span>Est. MDCCCX</span>
+                  <span>•</span>
+                  <span>Veritas Placement Ledger</span>
+                  <span>•</span>
+                  <span>Global Academica</span>
+                </motion.div>
+              </div>
+
+              {/* Right Column: Architectural Cathedral Arch Image frame */}
+              <div className="lg:col-span-5 flex justify-center lg:justify-end">
+                <motion.div
+                  initial={{ opacity: 0, scale: 0.95 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  transition={{ delay: 0.3, duration: 0.6 }}
+                  className="relative w-full max-w-[340px] aspect-[3/4] p-3 rounded border border-border bg-card shadow-premium ornate-frame"
+                >
+                  {/* Floating Crimson Wax Seal */}
+                  <div className="absolute -top-4 -right-4 w-12 h-12 rounded-full wax-seal flex items-center justify-center text-primary z-20 shadow-lg transform rotate-6 hover:rotate-12 transition-transform duration-300" title="Veritas Academic Seal">
+                    <GraduationCap className="h-5 w-5 fill-primary text-primary-foreground stroke-1" />
+                  </div>
+
+                  {/* Arched image frame */}
+                  <div className="relative w-full h-full overflow-hidden bg-muted arch-top shadow-inner">
+                    <img 
+                      src="https://images.unsplash.com/photo-1507842217343-583bb7270b66?q=80&w=800" 
+                      alt="Classical University Library study hall" 
+                      className="h-full w-full object-cover transition-transform duration-[1200ms] ease-out hover:scale-105 sepia-effect"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-[#1C1714]/80 via-transparent to-transparent pointer-events-none" />
+                  </div>
+                </motion.div>
+              </div>
+
+            </div>
           </div>
         </section>
 
