@@ -7,13 +7,13 @@ import { Navbar } from "@/components/layout/Navbar";
 import { Footer } from "@/components/layout/Footer";
 import { Button } from "@/components/ui/Button";
 import { Input } from "@/components/ui/Input";
-import { Card, CardContent } from "@/components/ui/Card";
+import { Card } from "@/components/ui/Card";
 import { Skeleton } from "@/components/ui/Skeleton";
 import { useCompareStore } from "@/lib/store/useCompareStore";
 import { 
-  Search, Filter, Star, GraduationCap, MapPin, 
-  ChevronLeft, ChevronRight, GitCompare, Bookmark, 
-  RotateCcw, SlidersHorizontal, IndianRupee 
+  Search, Filter, Star, MapPin, 
+  ChevronLeft, ChevronRight, GitCompare, 
+  RotateCcw, SlidersHorizontal 
 } from "lucide-react";
 import { formatCurrency, formatSalary } from "@/lib/utils";
 
@@ -106,30 +106,31 @@ function CollegesContent() {
   ];
 
   return (
-    <div className="min-h-screen bg-slate-950 text-slate-100 flex flex-col">
+    <div className="min-h-screen bg-background text-foreground flex flex-col">
       <Navbar />
 
       <main className="flex-grow max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8">
         
         {/* Header Title */}
         <div className="mb-8">
-          <h1 className="text-3xl font-extrabold text-white tracking-tight">Colleges Directory</h1>
-          <p className="text-slate-400 text-sm mt-1">Discover, filter, and compare top colleges across courses and placements.</p>
+          <span className="font-display text-[10px] tracking-[0.2em] text-primary uppercase block mb-1">Volume II • Directories</span>
+          <h1 className="text-3xl font-heading font-medium text-foreground tracking-tight">Colleges Directory</h1>
+          <p className="text-muted-foreground font-body italic text-sm mt-1">Discover, filter, and compare top colleges across courses and placements.</p>
         </div>
 
         {/* Layout: Sidebar + main list grid */}
         <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
           
           {/* 1. FILTER SIDEBAR (Desktop) */}
-          <aside className="hidden lg:block space-y-6 sticky top-24 h-fit p-6 rounded-2xl border border-border bg-slate-900/40 backdrop-blur-sm">
-            <div className="flex items-center justify-between border-b border-border/40 pb-4">
-              <span className="flex items-center space-x-2 font-bold text-white text-sm">
-                <Filter className="h-4 w-4 text-indigo-400" />
+          <aside className="hidden lg:block space-y-6 sticky top-24 h-fit p-6 rounded border border-border bg-card shadow-premium corner-flourish">
+            <div className="flex items-center justify-between border-b border-border/60 pb-4">
+              <span className="flex items-center space-x-2 font-display text-xs uppercase tracking-wider text-primary">
+                <Filter className="h-4 w-4 text-primary" />
                 <span>Filters</span>
               </span>
               <button 
                 onClick={handleResetFilters}
-                className="text-xs text-indigo-400 hover:text-indigo-300 flex items-center space-x-1"
+                className="text-xs font-display uppercase tracking-widest text-primary hover:text-[#D4B872] flex items-center space-x-1 cursor-pointer"
               >
                 <RotateCcw className="h-3 w-3" />
                 <span>Reset All</span>
@@ -138,17 +139,17 @@ function CollegesContent() {
 
             {/* Stream Selector */}
             <div className="space-y-2">
-              <label className="text-xs font-semibold text-slate-400 uppercase tracking-wider">Stream</label>
+              <label className="text-[10px] font-display font-semibold text-primary uppercase tracking-widest">Stream</label>
               <div className="flex flex-col space-y-2">
                 {streamOptions.map((opt) => (
-                  <label key={opt.value} className="flex items-center space-x-2 text-sm text-slate-300 cursor-pointer hover:text-white">
+                  <label key={opt.value} className="flex items-center space-x-2 text-sm font-body text-muted-foreground cursor-pointer hover:text-foreground">
                     <input 
                       type="radio" 
                       name="stream" 
                       value={opt.value}
                       checked={stream === opt.value}
                       onChange={() => setStream(opt.value)}
-                      className="rounded border-border text-primary focus:ring-primary bg-slate-950"
+                      className="rounded-sm border-border text-primary focus:ring-primary bg-background focus:ring-offset-0 cursor-pointer"
                     />
                     <span>{opt.label}</span>
                   </label>
@@ -158,11 +159,13 @@ function CollegesContent() {
 
             {/* Type Selector */}
             <div className="space-y-2 pt-2 border-t border-border/40">
-              <label className="text-xs font-semibold text-slate-400 uppercase tracking-wider font-mono">College Type</label>
+              <label className="text-[10px] font-display font-semibold text-primary uppercase tracking-widest">College Type</label>
               <select 
                 value={type}
                 onChange={(e) => setType(e.target.value)}
-                className="w-full h-9 rounded-lg border border-border bg-slate-950 px-3 py-1 text-sm focus:outline-none focus:ring-1 focus:ring-primary"
+                className="w-full h-10 rounded border border-border bg-[#1C1714] px-3 text-sm focus:outline-none focus:ring-1 focus:ring-primary text-foreground font-body"
+                aria-label="Filter by College Type"
+                title="Filter by College Type"
               >
                 <option value="">All Types</option>
                 <option value="Public">Public</option>
@@ -172,11 +175,13 @@ function CollegesContent() {
 
             {/* State Selector */}
             <div className="space-y-2 pt-2 border-t border-border/40">
-              <label className="text-xs font-semibold text-slate-400 uppercase tracking-wider font-mono">Location State</label>
+              <label className="text-[10px] font-display font-semibold text-primary uppercase tracking-widest">Location State</label>
               <select 
                 value={state}
                 onChange={(e) => setState(e.target.value)}
-                className="w-full h-9 rounded-lg border border-border bg-slate-950 px-3 py-1 text-sm focus:outline-none focus:ring-1 focus:ring-primary"
+                className="w-full h-10 rounded border border-border bg-[#1C1714] px-3 text-sm focus:outline-none focus:ring-1 focus:ring-primary text-foreground font-body"
+                aria-label="Filter by Location State"
+                title="Filter by Location State"
               >
                 <option value="">All States</option>
                 {stateOptions.map((st) => (
@@ -187,9 +192,9 @@ function CollegesContent() {
 
             {/* Fees Range Slider */}
             <div className="space-y-3 pt-2 border-t border-border/40">
-              <div className="flex justify-between text-xs font-semibold text-slate-400 uppercase tracking-wider font-mono">
+              <div className="flex justify-between text-[10px] font-display font-semibold text-primary uppercase tracking-widest">
                 <span>Max Annual Fees</span>
-                <span className="text-white normal-case font-bold">{formatCurrency(maxFees)}</span>
+                <span className="text-foreground normal-case font-bold">{formatCurrency(maxFees)}</span>
               </div>
               <input 
                 type="range"
@@ -198,9 +203,11 @@ function CollegesContent() {
                 step={50000}
                 value={maxFees}
                 onChange={(e) => setMaxFees(parseInt(e.target.value))}
-                className="w-full accent-indigo-500 cursor-pointer bg-slate-800 rounded-lg appearance-none h-1.5"
+                className="w-full accent-primary cursor-pointer bg-muted rounded appearance-none h-1.5 border border-border"
+                aria-label="Filter by Maximum Annual Fees"
+                title="Filter by Maximum Annual Fees"
               />
-              <div className="flex justify-between text-[10px] text-slate-500">
+              <div className="flex justify-between text-[10px] text-muted-foreground font-body italic">
                 <span>₹1,500</span>
                 <span>₹60 Lakh</span>
               </div>
@@ -208,17 +215,17 @@ function CollegesContent() {
 
             {/* Minimum Rating Selection */}
             <div className="space-y-2 pt-2 border-t border-border/40">
-              <label className="text-xs font-semibold text-slate-400 uppercase tracking-wider font-mono">Minimum Rating</label>
+              <label className="text-[10px] font-display font-semibold text-primary uppercase tracking-widest">Minimum Rating</label>
               <div className="flex items-center space-x-1.5">
                 {[0, 4.0, 4.5, 4.8].map((rat) => (
                   <button
                     key={rat}
                     onClick={() => setMinRating(rat)}
-                    className={`flex-grow h-8 text-xs font-semibold rounded-md border ${
+                    className={`flex-grow h-8 text-xs font-display uppercase tracking-widest rounded border ${
                       minRating === rat 
-                        ? "border-primary bg-primary/10 text-white" 
-                        : "border-border bg-slate-950 text-slate-400 hover:text-white"
-                    } transition-colors`}
+                        ? "border-primary bg-primary/10 text-primary" 
+                        : "border-border bg-background text-muted-foreground hover:text-foreground"
+                    } transition-colors cursor-pointer`}
                   >
                     {rat === 0 ? "All" : `${rat}★`}
                   </button>
@@ -235,13 +242,13 @@ function CollegesContent() {
               
               {/* Search Bar */}
               <div className="relative w-full md:max-w-md">
-                <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-500" />
+                <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-primary" />
                 <Input 
                   type="text"
                   placeholder="Search by name, course or keyword..."
                   value={search}
                   onChange={(e) => setSearch(e.target.value)}
-                  className="pl-10"
+                  className="pl-10 font-body placeholder:italic"
                 />
               </div>
 
@@ -249,18 +256,20 @@ function CollegesContent() {
               <div className="flex w-full md:w-auto items-center justify-between md:justify-end gap-3">
                 <button
                   onClick={() => setIsFilterMobileOpen(!isFilterMobileOpen)}
-                  className="lg:hidden flex items-center space-x-2 h-10 px-4 rounded-lg border border-border bg-slate-900/60 text-sm font-medium text-slate-300 hover:text-white"
+                  className="lg:hidden flex items-center space-x-2 h-10 px-4 rounded border border-border bg-[#251E19] text-xs font-display uppercase tracking-wider text-muted-foreground hover:text-foreground"
                 >
-                  <SlidersHorizontal className="h-4 w-4" />
+                  <SlidersHorizontal className="h-4 w-4 text-primary" />
                   <span>Filters</span>
                 </button>
 
                 <div className="flex items-center space-x-2 shrink-0">
-                  <span className="text-xs text-slate-500 whitespace-nowrap font-medium">Sort By:</span>
+                  <span className="text-xs text-muted-foreground font-display uppercase tracking-wider font-medium">Sort By:</span>
                   <select 
                     value={sort}
                     onChange={(e) => setSort(e.target.value)}
-                    className="h-10 rounded-lg border border-border bg-slate-900/60 px-3 py-1 text-sm focus:outline-none focus:ring-1 focus:ring-primary text-slate-200"
+                    className="h-10 rounded border border-border bg-[#251E19] px-3 py-1 text-sm focus:outline-none focus:ring-1 focus:ring-primary text-foreground font-body"
+                    aria-label="Sort Colleges Directory"
+                    title="Sort Colleges Directory"
                   >
                     <option value="rating_desc">Rating (High to Low)</option>
                     <option value="fees_asc">Fees (Low to High)</option>
@@ -275,15 +284,15 @@ function CollegesContent() {
             {isFilterMobileOpen && (
               <div className="fixed inset-0 z-50 lg:hidden flex justify-end">
                 <div className="fixed inset-0 bg-black/60" onClick={() => setIsFilterMobileOpen(false)} />
-                <div className="relative w-80 max-w-full bg-slate-950 p-6 h-full flex flex-col border-l border-border/80 overflow-y-auto space-y-6 z-10 shadow-2xl">
+                <div className="relative w-80 max-w-full bg-[#1C1714] p-6 h-full flex flex-col border-l border-border overflow-y-auto space-y-6 z-10 shadow-2xl">
                   <div className="flex justify-between items-center border-b border-border/40 pb-4">
-                    <span className="font-bold text-white flex items-center space-x-2">
+                    <span className="font-display uppercase tracking-widest text-primary flex items-center space-x-2">
                       <Filter className="h-5 w-5" />
                       <span>Filters</span>
                     </span>
                     <button 
                       onClick={() => setIsFilterMobileOpen(false)}
-                      className="text-xs text-slate-400 border border-border px-2 py-1 rounded"
+                      className="text-xs font-display uppercase border border-border px-2 py-1 rounded text-muted-foreground cursor-pointer"
                     >
                       Close
                     </button>
@@ -291,17 +300,17 @@ function CollegesContent() {
                   
                   {/* Stream Mobile */}
                   <div className="space-y-2">
-                    <label className="text-xs font-semibold text-slate-500 uppercase tracking-wider">Stream</label>
+                    <label className="text-[10px] font-display font-semibold text-primary uppercase tracking-widest">Stream</label>
                     <div className="flex flex-col space-y-2">
                       {streamOptions.map((opt) => (
-                        <label key={opt.value} className="flex items-center space-x-2 text-sm text-slate-300 cursor-pointer">
+                        <label key={opt.value} className="flex items-center space-x-2 text-sm font-body text-muted-foreground cursor-pointer">
                           <input 
                             type="radio" 
                             name="stream-mob" 
                             value={opt.value}
                             checked={stream === opt.value}
                             onChange={() => setStream(opt.value)}
-                            className="rounded border-border text-primary bg-slate-950"
+                            className="rounded-sm border-border text-primary bg-[#1C1714]"
                           />
                           <span>{opt.label}</span>
                         </label>
@@ -311,11 +320,13 @@ function CollegesContent() {
 
                   {/* Type Mobile */}
                   <div className="space-y-2">
-                    <label className="text-xs font-semibold text-slate-500 uppercase tracking-wider">Type</label>
+                    <label className="text-[10px] font-display font-semibold text-primary uppercase tracking-widest">Type</label>
                     <select 
                       value={type}
                       onChange={(e) => setType(e.target.value)}
-                      className="w-full h-10 rounded-lg border border-border bg-slate-900 px-3 text-sm focus:outline-none"
+                      className="w-full h-10 rounded border border-border bg-[#251E19] px-3 text-sm focus:outline-none text-foreground font-body"
+                      aria-label="Filter by College Type (Mobile)"
+                      title="Filter by College Type (Mobile)"
                     >
                       <option value="">All Types</option>
                       <option value="Public">Public</option>
@@ -325,11 +336,13 @@ function CollegesContent() {
 
                   {/* State Mobile */}
                   <div className="space-y-2">
-                    <label className="text-xs font-semibold text-slate-500 uppercase tracking-wider">State</label>
+                    <label className="text-[10px] font-display font-semibold text-primary uppercase tracking-widest">State</label>
                     <select 
                       value={state}
                       onChange={(e) => setState(e.target.value)}
-                      className="w-full h-10 rounded-lg border border-border bg-slate-900 px-3 text-sm focus:outline-none"
+                      className="w-full h-10 rounded border border-border bg-[#251E19] px-3 text-sm focus:outline-none text-foreground font-body"
+                      aria-label="Filter by Location State (Mobile)"
+                      title="Filter by Location State (Mobile)"
                     >
                       <option value="">All States</option>
                       {stateOptions.map((st) => (
@@ -340,9 +353,9 @@ function CollegesContent() {
 
                   {/* Fees Mobile */}
                   <div className="space-y-2">
-                    <div className="flex justify-between text-xs font-semibold text-slate-500 uppercase tracking-wider">
+                    <div className="flex justify-between text-[10px] font-display font-semibold text-primary uppercase tracking-widest">
                       <span>Max Fees</span>
-                      <span className="text-white font-bold">{formatCurrency(maxFees)}</span>
+                      <span className="text-foreground font-bold">{formatCurrency(maxFees)}</span>
                     </div>
                     <input 
                       type="range"
@@ -350,7 +363,9 @@ function CollegesContent() {
                       max={6000000}
                       value={maxFees}
                       onChange={(e) => setMaxFees(parseInt(e.target.value))}
-                      className="w-full accent-indigo-500 cursor-pointer"
+                      className="w-full accent-primary cursor-pointer"
+                      aria-label="Filter by Maximum Annual Fees (Mobile)"
+                      title="Filter by Maximum Annual Fees (Mobile)"
                     />
                   </div>
 
@@ -365,7 +380,7 @@ function CollegesContent() {
             {isLoading ? (
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 {[...Array(6)].map((_, i) => (
-                  <Card key={i} className="border-border overflow-hidden h-[380px] flex flex-col">
+                  <Card key={i} className="border-border overflow-hidden h-[380px] flex flex-col rounded bg-card shadow-premium">
                     <Skeleton className="h-44 w-full" />
                     <div className="p-5 flex-grow space-y-3">
                       <Skeleton className="h-3.5 w-1/4" />
@@ -380,18 +395,18 @@ function CollegesContent() {
                 ))}
               </div>
             ) : error ? (
-              <div className="rounded-2xl border border-rose-500/20 bg-rose-500/5 p-8 text-center">
-                <p className="text-rose-400 font-medium">Failed to retrieve colleges.</p>
-                <Button onClick={() => refetch()} variant="outline" className="mt-4 border-rose-500/20 text-rose-300">Retry Fetch</Button>
+              <div className="rounded border border-destructive/20 bg-destructive/5 p-8 text-center">
+                <p className="text-destructive font-medium font-body italic">Failed to retrieve colleges.</p>
+                <Button onClick={() => refetch()} variant="outline" className="mt-4 border-destructive/20 text-foreground hover:bg-destructive/10">Retry Fetch</Button>
               </div>
             ) : data?.colleges.length === 0 ? (
               /* EMPTY STATE */
-              <div className="rounded-2xl border border-dashed border-border/60 bg-slate-900/10 p-12 text-center flex flex-col items-center justify-center space-y-4">
-                <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-slate-800 text-slate-400">
+              <div className="rounded border border-dashed border-border bg-card/25 p-12 text-center flex flex-col items-center justify-center space-y-4">
+                <div className="flex h-12 w-12 items-center justify-center rounded border border-primary/20 bg-[#1C1714] text-primary">
                   <RotateCcw className="h-6 w-6" />
                 </div>
-                <h3 className="text-lg font-bold text-white">No colleges match your filter query</h3>
-                <p className="text-slate-400 text-sm max-w-sm">Try broadening your search terms, modifying your maximum fee ceiling, or resetting filters entirely.</p>
+                <h3 className="text-lg font-heading font-medium text-foreground">No colleges match your filter query</h3>
+                <p className="text-muted-foreground font-body italic text-sm max-w-sm">Try broadening your search terms, modifying your maximum fee ceiling, or resetting filters entirely.</p>
                 <Button onClick={handleResetFilters} variant="secondary" className="mt-2">
                   Reset All Filters
                 </Button>
@@ -407,25 +422,25 @@ function CollegesContent() {
                     <Card
                       key={college.id}
                       onClick={() => router.push(`/colleges/${college.id}`)}
-                      className="group flex flex-col border-border/60 hover:border-indigo-500/50 bg-slate-900/30 overflow-hidden cursor-pointer hover:-translate-y-1 transition-all duration-300"
+                      className="group flex flex-col border border-border bg-card overflow-hidden cursor-pointer shadow-premium hover:shadow-premium-hover transition-all duration-300 rounded corner-flourish"
                     >
-                      {/* Card Image */}
-                      <div className="relative h-44 w-full bg-slate-950 overflow-hidden">
+                      {/* Card Image (Arch Top + Sepia transition) */}
+                      <div className="relative h-44 w-full bg-muted overflow-hidden arch-top m-3 mb-0">
                         <img 
                           src={college.imageUrl || "https://images.unsplash.com/photo-1562774053-701939374585?q=80&w=400&fit=crop"} 
                           alt={college.name} 
-                          className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+                          className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105 sepia-effect"
                         />
-                        <div className="absolute inset-0 bg-gradient-to-t from-slate-950/85 to-transparent" />
+                        <div className="absolute inset-0 bg-gradient-to-t from-[#1C1714]/85 to-transparent" />
                         
                         {/* Rating Badge */}
-                        <div className="absolute top-3 left-3 flex items-center space-x-1 rounded-full bg-slate-950/80 backdrop-blur-md px-2 py-0.5 text-xs font-bold text-amber-400 border border-amber-400/20">
-                          <Star className="h-3.5 w-3.5 fill-amber-400" />
+                        <div className="absolute top-3 left-3 flex items-center space-x-1 rounded border border-primary/30 bg-[#251E19]/90 backdrop-blur-md px-2 py-0.5 text-xs font-bold text-primary">
+                          <Star className="h-3.5 w-3.5 fill-primary" />
                           <span>{college.rating.toFixed(1)}</span>
                         </div>
 
                         {/* Stream / Established Badge */}
-                        <div className="absolute bottom-3 left-3 text-[10px] text-slate-300 font-medium">
+                        <div className="absolute bottom-3 left-3 text-[10px] font-display text-muted-foreground font-medium uppercase tracking-wider">
                           Est. {college.established || "N/A"}
                         </div>
                       </div>
@@ -434,33 +449,33 @@ function CollegesContent() {
                       <div className="p-5 flex-grow flex flex-col justify-between">
                         <div>
                           <div className="flex items-center justify-between mb-1.5">
-                            <span className="text-[10px] uppercase font-bold tracking-wider text-indigo-400">{college.type}</span>
-                            <span className="text-[10px] text-slate-500">{college.courses?.length || 0} Courses</span>
+                            <span className="text-[10px] uppercase font-display font-semibold tracking-wider text-primary">{college.type}</span>
+                            <span className="text-[10px] text-muted-foreground font-display uppercase tracking-widest">{college.courses?.length || 0} Courses</span>
                           </div>
                           
-                          <h3 className="text-base font-bold text-white group-hover:text-primary transition-colors line-clamp-1 leading-snug">
+                          <h3 className="text-base font-heading font-medium text-foreground group-hover:text-primary transition-colors line-clamp-1 leading-snug">
                             {college.name}
                           </h3>
                           
-                          <p className="mt-1 flex items-center text-xs text-slate-400">
-                            <MapPin className="h-3.5 w-3.5 mr-1 text-slate-500 shrink-0" />
+                          <p className="mt-1 flex items-center text-xs text-muted-foreground font-body italic">
+                            <MapPin className="h-3.5 w-3.5 mr-1 text-primary shrink-0" />
                             <span>{college.location}, {college.state}</span>
                           </p>
                         </div>
 
                         {/* Placements & Action Section */}
-                        <div className="mt-5 space-y-4 pt-4 border-t border-border/40">
+                        <div className="mt-5 space-y-4 pt-4 border-t border-border">
                           <div className="grid grid-cols-2 gap-2 text-xs">
                             <div>
-                              <div className="text-[10px] text-slate-500">Average Fees</div>
-                              <div className="font-semibold text-white mt-0.5">
+                              <div className="text-[9px] font-display uppercase tracking-wider text-muted-foreground">Average Fees</div>
+                              <div className="font-semibold text-foreground mt-0.5">
                                 {formatCurrency(college.averageFees)}
-                                <span className="text-[9px] text-slate-500 font-normal"> / yr</span>
+                                <span className="text-[9px] text-muted-foreground font-normal"> / yr</span>
                               </div>
                             </div>
                             <div>
-                              <div className="text-[10px] text-slate-500">Avg Placement</div>
-                              <div className="font-semibold text-emerald-400 mt-0.5">
+                              <div className="text-[9px] font-display uppercase tracking-wider text-muted-foreground">Avg Placement</div>
+                              <div className="font-semibold text-primary mt-0.5">
                                 {latestPlacement ? formatSalary(latestPlacement.averagePackage) : "N/A"}
                               </div>
                             </div>
@@ -469,9 +484,9 @@ function CollegesContent() {
                           <div className="flex gap-2">
                             <Button
                               onClick={(e) => handleCompareToggle(e, college.id)}
-                              variant={inCompare ? "default" : "outline"}
+                              variant={inCompare ? "premium" : "outline"}
                               size="sm"
-                              className="flex-grow rounded-lg h-9 text-xs flex items-center justify-center space-x-1.5 font-medium"
+                              className="flex-grow rounded h-10 text-xs flex items-center justify-center space-x-1.5 font-medium"
                             >
                               <GitCompare className="h-3.5 w-3.5" />
                               <span>{inCompare ? "Added to Compare" : "Compare"}</span>
@@ -487,8 +502,8 @@ function CollegesContent() {
 
             {/* 4. PAGINATION CONTROLS */}
             {data?.pagination && data.pagination.totalPages > 1 && (
-              <div className="flex items-center justify-between border-t border-border/40 pt-6">
-                <span className="text-xs text-slate-500">
+              <div className="flex items-center justify-between border-t border-border pt-6 font-display text-xs uppercase tracking-wider">
+                <span className="text-muted-foreground">
                   Showing Page {data.pagination.page} of {data.pagination.totalPages} ({data.pagination.total} total)
                 </span>
                 
@@ -498,7 +513,7 @@ function CollegesContent() {
                     disabled={page === 1 || isLoading}
                     variant="outline"
                     size="sm"
-                    className="h-9 px-3 rounded-lg flex items-center space-x-1"
+                    className="h-10 px-4 rounded flex items-center space-x-1"
                   >
                     <ChevronLeft className="h-4 w-4" />
                     <span>Previous</span>
@@ -509,7 +524,7 @@ function CollegesContent() {
                     disabled={page === data.pagination.totalPages || isLoading}
                     variant="outline"
                     size="sm"
-                    className="h-9 px-3 rounded-lg flex items-center space-x-1"
+                    className="h-10 px-4 rounded flex items-center space-x-1"
                   >
                     <span>Next</span>
                     <ChevronRight className="h-4 w-4" />
@@ -532,10 +547,10 @@ function CollegesContent() {
 export default function CollegesPage() {
   return (
     <React.Suspense fallback={
-      <div className="min-h-screen bg-slate-950 text-slate-100 flex flex-col">
+      <div className="min-h-screen bg-background text-foreground flex flex-col">
         <Navbar />
         <main className="flex-grow max-w-7xl w-full mx-auto px-4 py-8 space-y-6">
-          <Skeleton className="h-[250px] w-full rounded-2xl" />
+          <Skeleton className="h-[250px] w-full rounded" />
         </main>
         <Footer />
       </div>

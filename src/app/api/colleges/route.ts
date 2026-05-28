@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { db } from "@/lib/db";
-import { mockColleges, MockCollege } from "@/lib/mockData";
+import { mockColleges } from "@/lib/mockData";
 
 export async function GET(request: NextRequest) {
   const { searchParams } = new URL(request.url);
