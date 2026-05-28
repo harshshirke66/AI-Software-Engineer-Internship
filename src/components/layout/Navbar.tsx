@@ -38,33 +38,37 @@ export function Navbar() {
           </Link>
 
           {/* Desktop Navigation */}
-          <nav className="hidden md:flex items-center space-x-8">
-            {navLinks.map((link) => {
+          <nav className="hidden md:flex items-center space-x-6">
+            {navLinks.map((link, idx) => {
               const isActive = pathname === link.href;
               const Icon = link.icon;
               return (
-                <Link
-                  key={link.href}
-                  href={link.href}
-                  className={`relative flex items-center space-x-1.5 font-display text-xs uppercase tracking-wider font-semibold transition-colors ${
-                    isActive ? "text-primary" : "text-muted-foreground hover:text-foreground"
-                  }`}
-                >
-                  <Icon className="h-4 w-4" />
-                  <span>{link.label}</span>
-                  {link.badge !== undefined && link.badge > 0 && (
-                    <span className="flex h-5 min-w-5 items-center justify-center rounded-full bg-primary px-1.5 text-[9px] font-bold text-[#1C1714]">
-                      {link.badge}
-                    </span>
+                <React.Fragment key={link.href}>
+                  <Link
+                    href={link.href}
+                    className={`relative flex items-center space-x-1.5 font-display text-[10px] uppercase tracking-[0.2em] hover:tracking-[0.25em] font-semibold transition-all duration-300 ${
+                      isActive ? "text-primary font-bold" : "text-muted-foreground hover:text-foreground"
+                    }`}
+                  >
+                    <Icon className="h-3.5 w-3.5" />
+                    <span>{link.label}</span>
+                    {link.badge !== undefined && link.badge > 0 && (
+                      <span className="flex h-4.5 min-w-4.5 items-center justify-center rounded bg-primary px-1.5 text-[9px] font-bold text-[#1C1714]">
+                        {link.badge}
+                      </span>
+                    )}
+                    {isActive && (
+                      <motion.div
+                        layoutId="activeNavLine"
+                        className="absolute -bottom-[23px] left-0 right-0 h-[2px] bg-primary"
+                        transition={{ type: "spring", stiffness: 380, damping: 30 }}
+                      />
+                    )}
+                  </Link>
+                  {idx < navLinks.length - 1 && (
+                    <span className="text-border font-body text-xs select-none" aria-hidden="true">/</span>
                   )}
-                  {isActive && (
-                    <motion.div
-                      layoutId="activeNavLine"
-                      className="absolute -bottom-5 left-0 right-0 h-[2px] bg-primary"
-                      transition={{ type: "spring", stiffness: 380, damping: 30 }}
-                    />
-                  )}
-                </Link>
+                </React.Fragment>
               );
             })}
           </nav>
@@ -254,6 +258,7 @@ export function Navbar() {
           </motion.div>
         )}
       </AnimatePresence>
+      <div className="h-[2px] bg-primary/85 shadow-brass" />
     </header>
   );
 }
