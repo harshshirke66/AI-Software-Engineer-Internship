@@ -64,23 +64,38 @@ export default function CollegeDetailPage({
 
   // 2. Fetch bookmarks state
   React.useEffect(() => {
-    if (session && college) {
-      supabase.auth.getSession().then(({ data: { session: supabaseSession } }) => {
-        const token = supabaseSession?.access_token;
+    let active = true;
+    async function loadBookmarkStatus() {
+      if (!session || !college) return;
+      try {
+        const sessionResult = await supabase.auth.getSession();
+        const supabaseSession = sessionResult?.data?.session;
+        if (!supabaseSession) return;
+        
+        if (!active) return;
+        const token = supabaseSession.access_token;
         const headers: Record<string, string> = {};
         if (token) {
           headers["Authorization"] = `Bearer ${token}`;
         }
-        fetch("/api/saved-colleges", { headers })
-          .then((r) => r.json())
-          .then((data) => {
-            if (data.savedColleges) {
-              setIsSaved(data.savedColleges.some((sc: any) => sc.collegeId === college.id));
-            }
-          })
-          .catch((err) => console.error("Error loading bookmarks status:", err));
-      });
+        const res = await fetch("/api/saved-colleges", { headers });
+        if (!res.ok) {
+          console.warn("Saved colleges API returned status:", res.status);
+          return;
+        }
+        const data = await res.json();
+        if (active && data?.savedColleges) {
+          setIsSaved(data.savedColleges.some((sc: any) => sc.collegeId === college.id));
+        }
+      } catch (err) {
+        console.error("Error loading bookmarks status:", err);
+      }
     }
+
+    loadBookmarkStatus();
+    return () => {
+      active = false;
+    };
   }, [session, college]);
 
   // 3. Toggle Bookmark Mutation
@@ -142,7 +157,7 @@ export default function CollegeDetailPage({
           {
             id: `temp-r-${Date.now()}`,
             userName: session?.user_metadata?.full_name || session?.user_metadata?.name || session?.email?.split("@")[0] || "You",
-            userImage: session?.user_metadata?.avatar_url || session?.user_metadata?.image || "https://images.unsplash.com/photo-1534528741775-53994a69daeb?q=80&w=200&h=200&fit=crop",
+            userImage: session?.user_metadata?.avatar_url || session?.user_metadata?.image || null,
             rating: reviewRating,
             comment: reviewComment,
             createdAt: new Date().toISOString()
@@ -488,11 +503,17 @@ export default function CollegeDetailPage({
                             <CardContent className="p-5 space-y-3">
                               <div className="flex items-center justify-between">
                                 <div className="flex items-center space-x-2.5">
-                                  <img 
-                                    src={review.userImage || "https://images.unsplash.com/photo-1534528741775-53994a69daeb?q=80&w=100&h=100&fit=crop"} 
-                                    alt={review.userName} 
-                                    className="h-8 w-8 rounded-sm object-cover border border-border"
-                                  />
+                                  {review.userImage ? (
+                                    <img 
+                                      src={review.userImage} 
+                                      alt={review.userName} 
+                                      className="h-8 w-8 rounded-sm object-cover border border-border"
+                                    />
+                                  ) : (
+                                    <div className="flex h-8 w-8 items-center justify-center rounded bg-brass text-[#1C1714] text-xs font-bold font-display shadow-brass shrink-0 border border-[#C9A962]/20">
+                                      {(review.userName || "Verified User")[0].toUpperCase()}
+                                    </div>
+                                  )}
                                   <div>
                                     <h5 className="text-xs font-display uppercase tracking-wider text-foreground">{review.userName || "Verified User"}</h5>
                                     <p className="text-[9px] text-muted-foreground font-body italic">{review.createdAt ? new Date(review.createdAt).toLocaleDateString() : "Just now"}</p>
