@@ -1,0 +1,84 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="100%" height="100%">
+  <!-- Definitions for Gradients -->
+  <defs>
+    <!-- Metallic Brass Gradient -->
+    <linearGradient id="brassGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#D4B872" />
+      <stop offset="50%" stop-color="#C9A962" />
+      <stop offset="100%" stop-color="#B8953F" />
+    </linearGradient>
+    
+    <!-- Metallic Brass Shaded Gradient (For 3D effect on compass points) -->
+    <linearGradient id="brassShade" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#A28030" />
+      <stop offset="50%" stop-color="#8B691C" />
+      <stop offset="100%" stop-color="#73530F" />
+    </linearGradient>
+
+    <!-- Deep Mahogany Background Gradient -->
+    <radialGradient id="bgGrad" cx="50%" cy="50%" r="50%" fx="50%" fy="50%">
+      <stop offset="0%" stop-color="#2D241E" />
+      <stop offset="100%" stop-color="#1C1714" />
+    </radialGradient>
+  </defs>
+
+  <!-- Background Shield or Circle -->
+  <rect width="512" height="512" rx="128" fill="url(#bgGrad)" stroke="#C9A962" stroke-width="8" />
+  
+  <!-- Inner Gold Ring -->
+  <circle cx="256" cy="256" r="210" fill="none" stroke="url(#brassGrad)" stroke-width="4" />
+  <circle cx="256" cy="256" r="200" fill="none" stroke="url(#brassGrad)" stroke-width="1.5" stroke-dasharray="6,6" opacity="0.7" />
+
+  <!-- Compass Rose -->
+  <!-- Outer Ring ticks / Degree Marks -->
+  <g stroke="#C9A962" stroke-width="2" opacity="0.6">
+    <line x1="256" y1="50" x2="256" y2="62" />
+    <line x1="256" y1="450" x2="256" y2="462" />
+    <line x1="50" y1="256" x2="62" y2="256" />
+    <line x1="450" y1="256" x2="462" y2="256" />
+    <!-- Diagonal Ticks -->
+    <line x1="110" y1="110" x2="119" y2="119" />
+    <line x1="402" y1="402" x2="393" y2="393" />
+    <line x1="402" y1="110" x2="393" y2="119" />
+    <line x1="110" y1="402" x2="119" y2="393" />
+  </g>
+
+  <!-- Large compass points (N, S, E, W) -->
+  <!-- North Point -->
+  <polygon points="256,256 256,76 230,256" fill="url(#brassGrad)" />
+  <polygon points="256,256 256,76 282,256" fill="url(#brassShade)" />
+  
+  <!-- South Point -->
+  <polygon points="256,256 256,436 282,256" fill="url(#brassGrad)" />
+  <polygon points="256,256 256,436 230,256" fill="url(#brassShade)" />
+  
+  <!-- East Point -->
+  <polygon points="256,256 436,256 256,282" fill="url(#brassGrad)" />
+  <polygon points="256,256 436,256 256,230" fill="url(#brassShade)" />
+
+  <!-- West Point -->
+  <polygon points="256,256 76,256 256,230" fill="url(#brassGrad)" />
+  <polygon points="256,256 76,256 256,282" fill="url(#brassShade)" />
+
+  <!-- Secondary points (NE, NW, SE, SW) -->
+  <!-- North-East Point -->
+  <polygon points="256,256 383,129 274,238" fill="url(#brassGrad)" opacity="0.85" />
+  <polygon points="256,256 383,129 238,274" fill="url(#brassShade)" opacity="0.85" />
+
+  <!-- South-West Point -->
+  <polygon points="256,256 129,383 238,274" fill="url(#brassGrad)" opacity="0.85" />
+  <polygon points="256,256 129,383 274,238" fill="url(#brassShade)" opacity="0.85" />
+
+  <!-- North-West Point -->
+  <polygon points="256,256 129,129 238,238" fill="url(#brassGrad)" opacity="0.85" />
+  <polygon points="256,256 129,129 274,274" fill="url(#brassShade)" opacity="0.85" />
+
+  <!-- South-East Point -->
+  <polygon points="256,256 383,383 274,274" fill="url(#brassGrad)" opacity="0.85" />
+  <polygon points="256,256 383,383 238,238" fill="url(#brassShade)" opacity="0.85" />
+
+  <!-- Central Crest Ring -->
+  <circle cx="256" cy="256" r="32" fill="#1C1714" stroke="url(#brassGrad)" stroke-width="4" />
+  <circle cx="256" cy="256" r="16" fill="#8B2635" /> <!-- Library Crimson Wax Center -->
+  <circle cx="256" cy="256" r="6" fill="#C9A962" />
+</svg>
