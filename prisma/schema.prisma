@@ -18,6 +18,8 @@ model User {
   savedColleges SavedCollege[]
   comparisons   Comparison[]
   reviews       Review[]
+  discussions   Discussion[]
+  replies       DiscussionReply[]
 
   @@map("users")
 }
@@ -108,4 +110,29 @@ model Comparison {
   user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@map("comparisons")
+}
+
+model Discussion {
+  id        String            @id @default(uuid())
+  title     String
+  content   String
+  category  String // e.g. "Admissions", "Placement", "Campus Life", "General"
+  userId    String
+  createdAt DateTime          @default(now())
+  user      User              @relation(fields: [userId], references: [id], onDelete: Cascade)
+  replies   DiscussionReply[]
+
+  @@map("discussions")
+}
+
+model DiscussionReply {
+  id           String     @id @default(uuid())
+  discussionId String
+  userId       String
+  content      String
+  createdAt    DateTime   @default(now())
+  discussion   Discussion @relation(fields: [discussionId], references: [id], onDelete: Cascade)
+  user         User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("discussion_replies")
 }
